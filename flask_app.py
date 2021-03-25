@@ -2,6 +2,8 @@ from flask import Flask, redirect, render_template
 from data import db_session
 from flask_login import LoginManager, login_user
 import datetime as dt
+
+from forms.add_job import JobForm
 from forms.login import LoginForm
 from forms.register import RegisterForm
 from data.users import User
@@ -64,6 +66,15 @@ def reqister():
         db_sess.commit()
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/add_job', methods=['GET', 'POST'])
+def add_job():
+    form = JobForm()
+    return render_template('add_job.html',
+                           title='ИгрАЙте В БрУаВл СтАрЗ',
+                           form=form,
+                           job_parameters=[form._fields[i] for i in list(form._fields)[:-2]])
 
 
 @login_manager.user_loader
